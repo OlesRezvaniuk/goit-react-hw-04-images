@@ -1,9 +1,12 @@
 import { Component } from 'react';
-import { ThreeDots } from 'react-loader-spinner';
-// import * as basicLightbox from 'basiclightbox';
 import { Modal } from './Modal/Modal';
-
+import { Searchbar } from './Searchbar/Searchbar';
+import { ImageGallery } from './ImageGallery/ImageGallery';
+import { Loader } from './Loader/Loader';
+import { Button } from './Button/Button';
 import axios from 'axios';
+
+const BASE_URL = 'https://pixabay.com/api/';
 
 export class SearchPicture extends Component {
   state = {
@@ -13,49 +16,78 @@ export class SearchPicture extends Component {
     search: '',
     isLoading: false,
     isModalOpen: false,
+    modalImg: '',
+    error: null,
   };
 
-  async onArrayItems() {
-    const data = await this.getPicture();
-    this.setState({
-      array: data.hits,
-    });
-  }
-
-  async getPicture() {
-    this.setState({ isLoading: true });
-    // TRY/CTCH
+  async ApiPicture() {
+    const { word, page } = this.state;
     const { data } = await axios.get(
-      `https://pixabay.com/api/?q=${this.state.word}&page=1&key=30029348-12068a2fdca19007a6804d89e&image_type=photo&orientation=horizontal&per_page=12&page=${this.state.page}`
+      `${BASE_URL}?q=${word}&page=1&key=30029348-12068a2fdca19007a6804d89e&image_type=photo&orientation=horizontal&per_page=12&page=${page}`
     );
-    this.setState({ isLoading: false });
     return data;
   }
 
-  async componentDidUpdate(_, prevState) {
-    if (prevState.page !== this.state.page) {
-      this.onArrayItems();
-      console.log('update');
+  async onArrayItems() {
+    this.setState({ isLoading: true });
+    try {
+      const dataA = await this.ApiPicture();
+      this.setState({
+        array: dataA.hits,
+      });
+    } catch (error) {
+      this.setState({ error });
+    } finally {
+      this.setState({ isLoading: false });
     }
+  }
+
+  async componentDidUpdate(_, prevState) {
+    const { page, isModalOpen } = this.state;
+    if (prevState.page !== page) {
+      this.onArrayItems();
+    }
+    if (isModalOpen)
+      window.addEventListener('keydown', this.handleKeyModalClose);
+  }
+
+  handleKeyModalClose = e => {
+    if (e.code === 'Escape') {
+      this.setState({ isModalOpen: false });
+    }
+  };
+
+  handleBackdropClose = e => {
+    if (e.target === e.currentTarget) {
+      this.setState({ isModalOpen: false });
+    }
+  };
+
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.handleKeyModalClose);
   }
 
   onChangePageIncrement = () => {
     this.setState(prevState => ({
       page: prevState.page + 1,
     }));
+    return;
   };
 
-  //   handleModalOpen = () => {
-  //     this.setState(prevState => ({
-  //       isModalOpen: !prevState.isModalOpen )}
-  // }
+  handleModalOpen = e => {
+    e.preventDefault();
+    this.setState(prevState => ({
+      isModalOpen: !prevState.isModalOpen,
+    }));
+    this.setState({ modalImgSrs: e.currentTarget.href });
+  };
 
   onChangePageDecrement = () => {
-    if (this.state.page > 1) {
+    const { page } = this.state;
+    if (page > 1) {
       this.setState(prevState => ({
         page: prevState.page - 1,
       }));
-      // this.onArrayItems();
     }
   };
 
@@ -70,138 +102,34 @@ export class SearchPicture extends Component {
   };
 
   render() {
-    const { array } = this.state;
+    const { array, word, page, isLoading, isModalOpen, modalImgSrs } =
+      this.state;
     return (
       <div style={{ textAlign: 'center' }}>
-        <form
-          onSubmit={this.handleButtonSearch}
-          style={{
-            display: 'block',
-            textAlign: 'center',
-            height: '50px',
-            padding: '10px',
-            backgroundColor: 'rgb(20 38 66)',
-          }}
-        >
-          <div
-            style={{
-              height: '100%',
-              position: 'relative',
-              width: '400px',
-              margin: '0px auto',
-            }}
-          >
-            <input
-              className="input"
-              type="text"
-              autoComplete="off"
-              autoFocus
-              placeholder="Search images and photos"
-              value={this.state.word}
-              onChange={this.onInputChange}
-              style={{
-                position: 'relative',
-                border: 'none',
-                borderRadius: '4px',
-                height: '100%',
-                width: '400px',
-                paddingLeft: '40px',
-                cursor: 'pointer',
-                boxShadow: 'inset 0px 0px 5px',
-              }}
-            />
-            <button
-              style={{
-                border: 'none',
-                backgroundColor: 'transparent',
-                position: 'absolute',
-                left: '0px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                height: '100%',
-                cursor: 'pointer',
-              }}
-              type="submit"
-            >
-              <img
-                style={{ height: '20px', display: 'flex' }}
-                src="https://cdn-icons-png.flaticon.com/512/2866/2866321.png"
-                alt="search-button"
-              />
-            </button>
-          </div>
-        </form>
-
-        <div
-          style={{
-            gridTemplateColumns: 'repeat(4,1fr)',
-            gap: '15px',
-            margin: '15px',
-            display: 'grid',
-          }}
-          className="gallery"
-        >
-          {array.map(item => (
-            <div
-              style={{ boxShadow: '0px 0px 4px' }}
-              key={item.id}
-              className="gallery__item"
-            >
-              <a
-                // onClick={}
-                style={{ display: 'flex', height: '100%' }}
-                className="gallery__link"
-                href={item.largeImageURL}
-              >
-                <img
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                  className="gallery__image"
-                  src={item.webformatURL}
-                  alt={item.tags}
-                />
-              </a>
-            </div>
-          ))}
-        </div>
-        {this.state.array.length > 0 && (
-          <div
-            style={{
-              display: 'inline-flex',
-              backgroundColor: 'rgb(20 38 66)',
-              padding: '5px',
-              borderRadius: '4px',
-            }}
-          >
-            <button
-              style={{ display: 'block', marginLeft: 'auto' }}
-              type="button"
-              onClick={this.onChangePageDecrement}
-            >
-              prev
-            </button>
-            <span style={{ margin: '0px 10px' }}>{this.state.page}</span>
-            <button
-              style={{ display: 'block', marginRight: 'auto' }}
-              type="button"
-              onClick={this.onChangePageIncrement}
-            >
-              next
-            </button>
-          </div>
-        )}
-        {this.state.isLoading && (
-          <ThreeDots
-            height="80"
-            width="80"
-            radius="9"
-            color="#4fa94d"
-            ariaLabel="three-dots-loading"
-            wrapperStyle={{ display: 'block' }}
-            wrapperClassName=""
-            visible={true}
+        <Searchbar
+          onSearch={this.handleButtonSearch}
+          onWord={word}
+          onInputChange={this.onInputChange}
+        />
+        <ImageGallery
+          onArray={array}
+          onHandleModalOpen={this.handleModalOpen}
+        />
+        {array.length > 0 && (
+          <Button
+            onPage={page}
+            onPageI={this.onChangePageIncrement}
+            onPageD={this.onChangePageDecrement}
           />
         )}
-        <Modal onArray={array} />
+        {isLoading && <Loader />}
+        {isModalOpen && (
+          <Modal
+            onBdClick={this.handleBackdropClose}
+            onLargeImg={modalImgSrs}
+            onWord={word}
+          />
+        )}
       </div>
     );
   }

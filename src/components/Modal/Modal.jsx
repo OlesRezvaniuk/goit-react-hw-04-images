@@ -1,6 +1,7 @@
-export const Modal = ({ onArray }) => {
+export const Modal = ({ onBdClick, onLargeImg, onWord }) => {
   return (
     <div
+      onClick={onBdClick}
       style={{
         position: 'fixed',
         width: '100%',
@@ -15,8 +16,8 @@ export const Modal = ({ onArray }) => {
     >
       <div
         style={{
-          height: '75%',
-          width: '75%',
+          // height: '75%',
+          // width: '75%',
           position: 'fixed',
           left: '50%',
           top: '50%',
@@ -25,7 +26,12 @@ export const Modal = ({ onArray }) => {
         }}
         className="modal"
       >
-        <img src="" alt="" />
+        <img
+          style={{ width: '100%' }}
+          src={onLargeImg}
+          alt={onWord}
+          loading="lazy"
+        />
       </div>
     </div>
   );

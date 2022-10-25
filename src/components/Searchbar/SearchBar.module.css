@@ -1,0 +1,49 @@
+.searchBar {
+  display: block;
+  text-align: center;
+  height: 50px;
+  padding: 10px;
+  background-color: rgb(20, 38, 66);
+}
+.searchBar__box {
+  height: 100%;
+  position: relative;
+  width: 400px;
+  margin: 0px auto;
+}
+.searchBar__input {
+  position: relative;
+  border: none;
+  border-radius: 4px;
+  height: 100%;
+  width: 400px;
+  padding-left: 40px;
+  cursor: pointer;
+  box-shadow: 0px 0px 5px inset;
+  font-weight: 700;
+}
+.searchBar__input:hover {
+  background-color: rgb(234, 244, 255);
+}
+.searchBar__button {
+  border: none;
+  background-color: transparent;
+  position: absolute;
+  left: 0px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 100%;
+  cursor: pointer;
+  scale: 1;
+  transition: 250ms;
+}
+
+.searchBar__button:hover,
+.searchBar__button:focus {
+  scale: 1.05;
+}
+
+.searchBar__img {
+  height: 20px;
+  display: flex;
+}
