@@ -1,22 +1,10 @@
+import s from './Button.module.css';
+
 export const Button = ({ onPage, onPageI, onPageD }) => {
   return (
-    <div
-      className="page__button"
-      style={{
-        display: 'inline-flex',
-        backgroundColor: 'rgb(20 38 66)',
-        padding: '5px',
-        borderRadius: '4px',
-        position: 'sticky',
-        bottom: '30px',
-      }}
-    >
+    <div className={s.pageBtn}>
       {onPage > 1 && (
-        <button
-          style={{ display: 'block', marginLeft: 'auto' }}
-          type="button"
-          onClick={onPageD}
-        >
+        <button className={s.pagBtn__arrow} type="button" onClick={onPageD}>
           <img
             loading="lazy"
             style={{ height: '14px', display: 'block', margin: 'auto' }}
@@ -26,17 +14,10 @@ export const Button = ({ onPage, onPageI, onPageD }) => {
         </button>
       )}
 
-      <span style={{ margin: '0px 10px' }}>{onPage}</span>
+      <span className={s.pageBtn__nmb}>{onPage}</span>
 
       {onPage === 42 || (
-        <button
-          style={{
-            display: 'block',
-            marginRight: 'auto',
-          }}
-          type="button"
-          onClick={onPageI}
-        >
+        <button className={s.pagBtn__arrow} type="button" onClick={onPageI}>
           <img
             style={{
               height: '14px',

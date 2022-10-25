@@ -1,0 +1,35 @@
+.pageBtn {
+  display: inline-flex;
+  padding: 5px;
+  border-radius: 4px;
+  position: sticky;
+  bottom: 30px;
+}
+
+.pagBtn__arrow {
+  display: block;
+  margin-left: auto;
+  border: none;
+  background-color: transparent;
+  scale: 1;
+  transition: 250ms;
+  cursor: pointer;
+}
+
+.pagBtn__arrow:hover,
+.pagBtn__arrow:focus {
+  scale: 1.2;
+}
+
+.pageBtn__nmb {
+  margin: 0px 10px;
+  color: black;
+  font-weight: 700;
+}
+
+.pageBtn__img {
+  height: 14px;
+  display: block;
+  margin: auto;
+  transform: scale(-1, 1);
+}

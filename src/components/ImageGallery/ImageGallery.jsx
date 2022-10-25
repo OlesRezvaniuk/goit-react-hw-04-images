@@ -1,16 +1,9 @@
-import { ImageGalleryItem } from './ImageGalleryItem/ImageGalleryItem';
+import { ImageGalleryItem } from './Item/ImageGalleryItem';
+import s from './ImageGallery.module.css';
 
 export const ImageGallery = ({ onArray, onHandleModalOpen }) => {
   return (
-    <div
-      style={{
-        gridTemplateColumns: 'repeat(4,1fr)',
-        gap: '15px',
-        margin: '15px',
-        display: 'grid',
-      }}
-      className="gallery"
-    >
+    <div className={s.gallery}>
       <ImageGalleryItem
         onArrayX={onArray}
         onHandleModalOpenX={onHandleModalOpen}
