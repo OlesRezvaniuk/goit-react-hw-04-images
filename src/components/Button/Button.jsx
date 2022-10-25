@@ -1,4 +1,5 @@
 import s from './Button.module.css';
+import PropTypes from 'prop-types';
 
 export const Button = ({ onPage, onPageI, onPageD }) => {
   return (
@@ -32,4 +33,10 @@ export const Button = ({ onPage, onPageI, onPageD }) => {
       )}
     </div>
   );
+};
+
+Button.propTypes = {
+  onPage: PropTypes.number.isRequired,
+  onPageI: PropTypes.func.isRequired,
+  onPageD: PropTypes.func.isRequired,
 };

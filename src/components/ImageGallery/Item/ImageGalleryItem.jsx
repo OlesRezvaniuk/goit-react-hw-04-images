@@ -1,4 +1,5 @@
 import s from './ImageGalleryItem.module.css';
+import PropTypes from 'prop-types';
 
 export const ImageGalleryItem = ({ onArrayX, onHandleModalOpenX }) => {
   return onArrayX.map(item => (
@@ -16,4 +17,13 @@ export const ImageGalleryItem = ({ onArrayX, onHandleModalOpenX }) => {
       </a>
     </div>
   ));
+};
+
+ImageGalleryItem.propTypes = {
+  onHandleModalOpenX: PropTypes.func.isRequired,
+  onArrayX: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+    })
+  ),
 };

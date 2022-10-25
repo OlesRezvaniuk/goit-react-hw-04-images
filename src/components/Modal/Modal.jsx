@@ -1,4 +1,5 @@
 import s from './Modal.module.css';
+import PropTypes from 'prop-types';
 
 export const Modal = ({ onBdClick, onLargeImg, onWord }) => {
   return (
@@ -13,4 +14,10 @@ export const Modal = ({ onBdClick, onLargeImg, onWord }) => {
       </div>
     </div>
   );
+};
+
+Modal.propTypes = {
+  onBdClick: PropTypes.bool.isRequired,
+  onLargeImg: PropTypes.string.isRequired,
+  onWord: PropTypes.string.isRequired,
 };

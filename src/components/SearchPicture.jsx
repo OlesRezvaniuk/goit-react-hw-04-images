@@ -35,6 +35,7 @@ export class SearchPicture extends Component {
       this.setState({
         array: dataA.hits,
       });
+      console.log(this.state.array);
     } catch (error) {
       this.setState({ error });
     } finally {
@@ -51,6 +52,10 @@ export class SearchPicture extends Component {
       window.addEventListener('keydown', this.handleKeyModalClose);
   }
 
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.handleKeyModalClose);
+  }
+
   handleKeyModalClose = e => {
     if (e.code === 'Escape') {
       this.setState({ isModalOpen: false });
@@ -63,23 +68,10 @@ export class SearchPicture extends Component {
     }
   };
 
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.handleKeyModalClose);
-  }
-
   onChangePageIncrement = () => {
     this.setState(prevState => ({
       page: prevState.page + 1,
     }));
-    return;
-  };
-
-  handleModalOpen = e => {
-    e.preventDefault();
-    this.setState(prevState => ({
-      isModalOpen: !prevState.isModalOpen,
-    }));
-    this.setState({ modalImgSrs: e.currentTarget.href });
   };
 
   onChangePageDecrement = () => {
@@ -89,6 +81,14 @@ export class SearchPicture extends Component {
         page: prevState.page - 1,
       }));
     }
+  };
+
+  handleModalOpen = e => {
+    e.preventDefault();
+    this.setState(prevState => ({
+      isModalOpen: !prevState.isModalOpen,
+    }));
+    this.setState({ modalImgSrs: e.currentTarget.href });
   };
 
   onInputChange = e => {

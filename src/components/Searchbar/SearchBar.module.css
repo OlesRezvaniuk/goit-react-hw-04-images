@@ -4,11 +4,11 @@
   height: 50px;
   padding: 10px;
   background-color: rgb(20, 38, 66);
-      position: sticky;
-    top: 0;
-    z-index: 10;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
-}
+
 .searchBar__box {
   height: 100%;
   position: relative;

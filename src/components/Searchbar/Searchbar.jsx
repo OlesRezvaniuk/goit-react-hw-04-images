@@ -1,4 +1,5 @@
 import s from './SearchBar.module.css';
+import PropTypes from 'prop-types';
 
 export const Searchbar = ({ onSearch, onWord, onInputChange }) => {
   return (
@@ -23,4 +24,10 @@ export const Searchbar = ({ onSearch, onWord, onInputChange }) => {
       </div>
     </form>
   );
+};
+
+Searchbar.propTypes = {
+  onSearch: PropTypes.func.isRequired,
+  onWord: PropTypes.string.isRequired,
+  onInputChange: PropTypes.func.isRequired,
 };
