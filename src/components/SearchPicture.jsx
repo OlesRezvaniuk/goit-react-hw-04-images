@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import { ThreeDots } from 'react-loader-spinner';
-import * as basicLightbox from 'basiclightbox';
+// import * as basicLightbox from 'basiclightbox';
+import { Modal } from './Modal/Modal';
 
 import axios from 'axios';
 
@@ -10,11 +11,14 @@ export class SearchPicture extends Component {
     page: 1,
     word: '',
     isLoading: false,
+    isModalOpen: false,
   };
 
   async onArrayItems() {
     const data = await this.getPicture();
-    this.setState({ array: data.hits });
+    this.setState({
+      array: data.hits,
+    });
   }
 
   async getPicture() {
@@ -27,38 +31,40 @@ export class SearchPicture extends Component {
   }
 
   async componentDidUpdate(_, prevState) {
-    if (prevState.word !== this.state.word) {
-      this.setState({ page: 1 });
+    if (prevState.page !== this.state.page) {
+      this.onArrayItems();
+      console.log('update');
     }
-    console.log('update');
   }
 
   onChangePageIncrement = () => {
     this.setState(prevState => ({
       page: prevState.page + 1,
     }));
-    this.onArrayItems();
   };
+
+  handleModalOpen = () => {
+    this.setState(prevState => ({
+      isModalOpen: !prevState.isModalOpen )}
+
 
   onChangePageDecrement = () => {
     if (this.state.page > 1) {
       this.setState(prevState => ({
         page: prevState.page - 1,
       }));
-      this.onArrayItems();
+      // this.onArrayItems();
     }
-  };
-
-  reset = () => {
-    this.setState({ word: '', page: 1 });
   };
 
   onInputChange = e => {
     this.setState({ word: e.currentTarget.value });
   };
+
   handleButtonSearch = e => {
     e.preventDefault();
     this.onArrayItems();
+    this.setState({ page: 1 });
   };
 
   render() {
@@ -66,6 +72,7 @@ export class SearchPicture extends Component {
     return (
       <div style={{ textAlign: 'center' }}>
         <form
+          onSubmit={this.handleButtonSearch}
           style={{
             display: 'block',
             textAlign: 'center',
@@ -102,7 +109,6 @@ export class SearchPicture extends Component {
               }}
             />
             <button
-              onClick={this.handleButtonSearch}
               style={{
                 border: 'none',
                 backgroundColor: 'transparent',
@@ -140,6 +146,7 @@ export class SearchPicture extends Component {
               className="gallery__item"
             >
               <a
+                // onClick={}
                 style={{ display: 'flex', height: '100%' }}
                 className="gallery__link"
                 href={item.largeImageURL}
@@ -192,6 +199,7 @@ export class SearchPicture extends Component {
             visible={true}
           />
         )}
+        <Modal />
       </div>
     );
   }
