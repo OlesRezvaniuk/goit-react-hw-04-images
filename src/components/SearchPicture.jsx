@@ -10,6 +10,7 @@ export class SearchPicture extends Component {
     array: [],
     page: 1,
     word: '',
+    search: '',
     isLoading: false,
     isModalOpen: false,
   };
@@ -23,6 +24,7 @@ export class SearchPicture extends Component {
 
   async getPicture() {
     this.setState({ isLoading: true });
+    // TRY/CTCH
     const { data } = await axios.get(
       `https://pixabay.com/api/?q=${this.state.word}&page=1&key=30029348-12068a2fdca19007a6804d89e&image_type=photo&orientation=horizontal&per_page=12&page=${this.state.page}`
     );
@@ -43,10 +45,10 @@ export class SearchPicture extends Component {
     }));
   };
 
-  handleModalOpen = () => {
-    this.setState(prevState => ({
-      isModalOpen: !prevState.isModalOpen )}
-
+  //   handleModalOpen = () => {
+  //     this.setState(prevState => ({
+  //       isModalOpen: !prevState.isModalOpen )}
+  // }
 
   onChangePageDecrement = () => {
     if (this.state.page > 1) {
@@ -199,7 +201,7 @@ export class SearchPicture extends Component {
             visible={true}
           />
         )}
-        <Modal />
+        <Modal onArray={array} />
       </div>
     );
   }

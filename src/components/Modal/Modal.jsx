@@ -1,4 +1,4 @@
-export const Modal = ({}) => {
+export const Modal = ({ onArray }) => {
   return (
     <div
       style={{
@@ -11,7 +11,7 @@ export const Modal = ({}) => {
         left: '0',
         zIndex: '9',
       }}
-      class="overlay"
+      className="overlay"
     >
       <div
         style={{
@@ -23,7 +23,7 @@ export const Modal = ({}) => {
           transform: 'translate(-50%, -50%)',
           backgroundColor: 'white',
         }}
-        class="modal"
+        className="modal"
       >
         <img src="" alt="" />
       </div>
