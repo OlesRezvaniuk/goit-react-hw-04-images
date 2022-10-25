@@ -35,7 +35,6 @@ export class SearchPicture extends Component {
       this.setState({
         array: dataA.hits,
       });
-      console.log(this.state.array);
     } catch (error) {
       this.setState({ error });
     } finally {
