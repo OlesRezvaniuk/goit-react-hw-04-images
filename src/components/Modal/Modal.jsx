@@ -17,7 +17,7 @@ export const Modal = ({ onBdClick, onLargeImg, onWord }) => {
 };
 
 Modal.propTypes = {
-  onBdClick: PropTypes.bool.isRequired,
+  onBdClick: PropTypes.func.isRequired,
   onLargeImg: PropTypes.string.isRequired,
   onWord: PropTypes.string.isRequired,
 };

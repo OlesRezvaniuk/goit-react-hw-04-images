@@ -1,4 +1,6 @@
-import { Component } from 'react';
+// import { Component } from 'react';
+import { useState } from 'react';
+import { useEffect } from 'react';
 import { Modal } from './Modal/Modal';
 import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
@@ -8,128 +10,103 @@ import axios from 'axios';
 
 const BASE_URL = 'https://pixabay.com/api/';
 
-export class SearchPicture extends Component {
-  state = {
-    array: [],
-    page: 1,
-    word: '',
-    search: '',
-    isLoading: false,
-    isModalOpen: false,
-    modalImg: '',
-    error: null,
-  };
+export const SearchPicture = () => {
+  const [images, setImages] = useState([]);
+  const [page, setPage] = useState(null);
+  const [word, setWord] = useState('');
+  const [search, setSearch] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalImg, setModalImg] = useState(false);
+  const [error, setError] = useState(null);
 
-  async ApiPicture() {
-    const { word, page } = this.state;
+  const ApiPicture = async () => {
     const { data } = await axios.get(
       `${BASE_URL}?q=${word}&page=1&key=30029348-12068a2fdca19007a6804d89e&image_type=photo&orientation=horizontal&per_page=12&page=${page}`
     );
     return data;
-  }
+  };
 
-  async onArrayItems() {
-    this.setState({ isLoading: true });
+  const onArrayItems = async () => {
+    setIsLoading(true);
     try {
-      const dataA = await this.ApiPicture();
-      this.setState({
-        array: dataA.hits,
-      });
+      const dataA = await ApiPicture();
+      setImages(dataA.hits);
     } catch (error) {
-      this.setState({ error });
+      setError(error);
     } finally {
-      this.setState({ isLoading: false });
+      setIsLoading(false);
     }
-  }
+  };
 
-  async componentDidUpdate(_, prevState) {
-    const { page, isModalOpen } = this.state;
-    if (prevState.page !== page) {
-      this.onArrayItems();
+  useEffect(() => {
+    if (page >= 1) {
+      onArrayItems();
     }
-    if (isModalOpen)
-      window.addEventListener('keydown', this.handleKeyModalClose);
-  }
+  }, [page]);
 
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.handleKeyModalClose);
-  }
+  useEffect(() => {
+    if (isModalOpen) {
+      window.addEventListener('keydown', handleKeyModalClose);
+    }
+  }, [isModalOpen]);
 
-  handleKeyModalClose = e => {
+  useEffect(() => {
+    window.removeEventListener('keydown', handleKeyModalClose);
+  }, []);
+
+  const handleKeyModalClose = e => {
     if (e.code === 'Escape') {
-      this.setState({ isModalOpen: false });
+      setIsModalOpen(false);
     }
   };
 
-  handleBackdropClose = e => {
+  const handleBackdropClose = e => {
     if (e.target === e.currentTarget) {
-      this.setState({ isModalOpen: false });
+      setIsModalOpen(false);
     }
   };
 
-  onChangePageIncrement = () => {
-    this.setState(prevState => ({
-      page: prevState.page + 1,
-    }));
+  const onShowMore = () => {
+    const newImages = images;
+    console.log(newImages);
+    setImages([...images, ...images]);
   };
+  console.log(images);
 
-  onChangePageDecrement = () => {
-    const { page } = this.state;
-    if (page > 1) {
-      this.setState(prevState => ({
-        page: prevState.page - 1,
-      }));
-    }
-  };
-
-  handleModalOpen = e => {
+  const handleModalOpen = e => {
     e.preventDefault();
-    this.setState(prevState => ({
-      isModalOpen: !prevState.isModalOpen,
-    }));
-    this.setState({ modalImgSrs: e.currentTarget.href });
+    setIsModalOpen(!isModalOpen);
+    setModalImg(e.currentTarget.href);
   };
 
-  onInputChange = e => {
-    this.setState({ word: e.currentTarget.value });
+  const onInputChange = e => {
+    setWord(e.currentTarget.value);
   };
 
-  handleButtonSearch = e => {
+  const handleButtonSearch = e => {
     e.preventDefault();
-    this.onArrayItems();
-    this.setState({ page: 1 });
+    onArrayItems();
+    setPage(1);
   };
 
-  render() {
-    const { array, word, page, isLoading, isModalOpen, modalImgSrs } =
-      this.state;
-    return (
-      <div style={{ textAlign: 'center' }}>
-        <Searchbar
-          onSearch={this.handleButtonSearch}
+  return (
+    <div style={{ textAlign: 'center' }}>
+      <Searchbar
+        onSearch={handleButtonSearch}
+        onWord={word}
+        onInputChange={onInputChange}
+      />
+      <ImageGallery onArray={images} onHandleModalOpen={handleModalOpen} />
+      {images.length > 0 && <Button onPage={page} onShowMore={onShowMore} />}
+      {isLoading && <Loader />}
+      {isModalOpen && (
+        <Modal
+          onBdClick={handleBackdropClose}
+          onLargeImg={modalImg}
           onWord={word}
-          onInputChange={this.onInputChange}
         />
-        <ImageGallery
-          onArray={array}
-          onHandleModalOpen={this.handleModalOpen}
-        />
-        {array.length > 0 && (
-          <Button
-            onPage={page}
-            onPageI={this.onChangePageIncrement}
-            onPageD={this.onChangePageDecrement}
-          />
-        )}
-        {isLoading && <Loader />}
-        {isModalOpen && (
-          <Modal
-            onBdClick={this.handleBackdropClose}
-            onLargeImg={modalImgSrs}
-            onWord={word}
-          />
-        )}
-      </div>
-    );
-  }
-}
+      )}
+    </div>
+  );
+};

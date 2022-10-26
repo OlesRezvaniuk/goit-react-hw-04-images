@@ -19,11 +19,11 @@ export const ImageGalleryItem = ({ onArrayX, onHandleModalOpenX }) => {
   ));
 };
 
-ImageGalleryItem.propTypes = {
-  onHandleModalOpenX: PropTypes.func.isRequired,
-  onArrayX: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-    })
-  ),
-};
+// ImageGalleryItem.propTypes = {
+//   onHandleModalOpenX: PropTypes.func.isRequired,
+//   onArrayX: PropTypes.arrayOf(
+//     PropTypes.shape({
+//       id: PropTypes.number.isRequired,
+//     })
+//   ),
+// };
