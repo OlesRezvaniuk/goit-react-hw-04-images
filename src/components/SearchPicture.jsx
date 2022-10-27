@@ -14,7 +14,6 @@ export const SearchPicture = () => {
   const [images, setImages] = useState([]);
   const [page, setPage] = useState(null);
   const [word, setWord] = useState('');
-  const [search, setSearch] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalImg, setModalImg] = useState(false);
