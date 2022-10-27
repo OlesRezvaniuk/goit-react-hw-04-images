@@ -30,7 +30,11 @@ export const SearchPicture = () => {
     setIsLoading(true);
     try {
       const dataA = await ApiPicture();
-      setImages(dataA.hits);
+      if (page === 1) {
+        setImages(dataA.hits);
+      } else if (page > 1 && page < 43) {
+        setImages(state => [...state, ...dataA.hits]);
+      }
     } catch {
       setError(error);
     } finally {
@@ -42,6 +46,7 @@ export const SearchPicture = () => {
     if (page >= 1) {
       onArrayItems();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
   useEffect(() => {
@@ -64,7 +69,12 @@ export const SearchPicture = () => {
     if (page < 43) {
       setPage(page + 1);
     }
-    setImages(state => [...state, ...images]);
+    setTimeout(() => {
+      window.scrollBy({
+        top: (0, 2000),
+        behavior: 'smooth',
+      });
+    }, 750);
   };
 
   const handleModalOpen = e => {
@@ -76,7 +86,6 @@ export const SearchPicture = () => {
   const onInputChange = e => {
     setWord(e.currentTarget.value);
   };
-  console.log(images);
 
   const handleButtonSearch = e => {
     e.preventDefault();
