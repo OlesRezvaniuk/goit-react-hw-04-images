@@ -17,7 +17,7 @@ export const SearchPicture = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalImg, setModalImg] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState('error');
 
   const ApiPicture = async () => {
     const { data } = await axios.get(
@@ -31,7 +31,7 @@ export const SearchPicture = () => {
     try {
       const dataA = await ApiPicture();
       setImages(dataA.hits);
-    } catch (error) {
+    } catch {
       setError(error);
     } finally {
       setIsLoading(false);
@@ -43,12 +43,6 @@ export const SearchPicture = () => {
       onArrayItems();
     }
   }, [page]);
-
-  useEffect(() => {
-    if (isModalOpen) {
-      window.addEventListener('keydown', handleKeyModalClose);
-    }
-  }, [isModalOpen]);
 
   useEffect(() => {
     window.removeEventListener('keydown', handleKeyModalClose);
