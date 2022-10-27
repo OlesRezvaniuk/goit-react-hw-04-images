@@ -68,11 +68,11 @@ export const SearchPicture = () => {
   };
 
   const onShowMore = () => {
-    const newImages = images;
-    console.log(newImages);
-    setImages([...images, ...images]);
+    if (page < 43) {
+      setPage(page + 1);
+    }
+    setImages(state => [...state, ...images]);
   };
-  console.log(images);
 
   const handleModalOpen = e => {
     e.preventDefault();
@@ -83,6 +83,7 @@ export const SearchPicture = () => {
   const onInputChange = e => {
     setWord(e.currentTarget.value);
   };
+  console.log(images);
 
   const handleButtonSearch = e => {
     e.preventDefault();
