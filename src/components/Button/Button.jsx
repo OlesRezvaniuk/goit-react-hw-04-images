@@ -1,7 +1,7 @@
 import s from './Button.module.css';
 import PropTypes from 'prop-types';
 
-export const Button = ({ onSetPage, onPage, onTotalHits, onSetTotalHits }) => {
+export const Button = ({ onSetPage, onPage, onTotalHits }) => {
   const onShowMore = () => {
     if (onPage < onTotalHits / 12) {
       onSetPage(onPage + 1);

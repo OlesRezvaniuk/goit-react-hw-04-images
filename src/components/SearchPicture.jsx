@@ -94,7 +94,7 @@ export const SearchPicture = () => {
         onInputChange={onInputChange}
       />
       <ImageGallery onArray={images} onHandleModalOpen={handleModalOpen} />
-      {page > 0 && (
+      {page > 0 && page < totalHits / 12 && (
         <Button
           onPage={page}
           onSetPage={setPage}
