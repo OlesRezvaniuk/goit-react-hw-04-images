@@ -18,6 +18,7 @@ export const SearchPicture = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalImg, setModalImg] = useState(false);
   const [error, setError] = useState('error');
+  const [totalHits, setTotalHits] = useState();
 
   const ApiPicture = async () => {
     const { data } = await axios.get(
@@ -29,11 +30,12 @@ export const SearchPicture = () => {
   const onArrayItems = async () => {
     setIsLoading(true);
     try {
-      const dataA = await ApiPicture();
+      const imgArray = await ApiPicture();
+      setTotalHits(imgArray.totalHits);
       if (page === 1) {
-        setImages(dataA.hits);
-      } else if (page > 1 && page < 43) {
-        setImages(state => [...state, ...dataA.hits]);
+        setImages(imgArray.hits);
+      } else if (page > 1 && page < totalHits / 12) {
+        setImages(state => [...state, ...imgArray.hits]);
       }
     } catch {
       setError(error);
@@ -50,7 +52,10 @@ export const SearchPicture = () => {
   }, [page]);
 
   useEffect(() => {
-    window.removeEventListener('keydown', handleKeyModalClose);
+    window.addEventListener('keydown', handleKeyModalClose);
+    return () => {
+      window.removeEventListener('keydown', handleKeyModalClose);
+    };
   }, []);
 
   const handleKeyModalClose = e => {
@@ -63,18 +68,6 @@ export const SearchPicture = () => {
     if (e.target === e.currentTarget) {
       setIsModalOpen(false);
     }
-  };
-
-  const onShowMore = () => {
-    if (page < 43) {
-      setPage(page + 1);
-    }
-    setTimeout(() => {
-      window.scrollBy({
-        top: (0, 2000),
-        behavior: 'smooth',
-      });
-    }, 750);
   };
 
   const handleModalOpen = e => {
@@ -101,7 +94,14 @@ export const SearchPicture = () => {
         onInputChange={onInputChange}
       />
       <ImageGallery onArray={images} onHandleModalOpen={handleModalOpen} />
-      {images.length > 0 && <Button onPage={page} onShowMore={onShowMore} />}
+      {page > 0 && (
+        <Button
+          onPage={page}
+          onSetPage={setPage}
+          onTotalHits={totalHits}
+          onSetTotalHits={setTotalHits}
+        />
+      )}
       {isLoading && <Loader />}
       {isModalOpen && (
         <Modal

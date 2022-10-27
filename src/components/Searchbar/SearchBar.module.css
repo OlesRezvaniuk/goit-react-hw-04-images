@@ -12,7 +12,7 @@
 .searchBar__box {
   height: 100%;
   position: relative;
-  width: 400px;
+  width: 290px;
   margin: 0px auto;
 }
 .searchBar__input {
@@ -20,7 +20,7 @@
   border: none;
   border-radius: 4px;
   height: 100%;
-  width: 400px;
+  width: 290px;
   padding-left: 40px;
   cursor: pointer;
   box-shadow: 0px 0px 5px inset;
